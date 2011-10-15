@@ -1,9 +1,9 @@
 {
   "name":         "paige",
   
-  "description":  "",
+  "description":  "The quickie-wiki Github project page generator",
   
-  "keywords":     [],
+  "keywords":     ["docs", "project", "page", "generator", "coffeescript", "docco", "documentation", "site"],
   
   "author":       "Rodrigo Thauby",
   
