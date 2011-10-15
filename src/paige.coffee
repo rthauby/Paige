@@ -27,20 +27,23 @@ template = (str) ->
        "');}return p.join('');"
 
 
-# Kind of hacky, but I can't figure out another way of doing this cleanly
+# Kind of hacky, but I can't figure out another way of doing this cleanly.
+# Will list all the files that will be used as your source file for passing onto Docco.
 get_subfiles = (callback) ->
   exec "ls #{configuration.docco_files}", (error, stdout, stderr) ->
     callback stdout.trim().split("\n") if callback
 
 
-# ...
+# Pass the list of files as process arguments, which is the only way I can interface with Docco at this point.
 process_docco_files = ->
   get_subfiles (result) ->
     process.ARGV = process.argv = result
     require 'docco'
 
 
-# ...
+# Creates html wrapper for all the Docco pages. 
+# The point here is that I can now keep a navigation bar at the top without having to 
+# mess with any of the Docco internals at all.
 process_docco_wrappers = ->
   get_subfiles (result) ->
     result = clean_path_names result
@@ -55,13 +58,13 @@ process_docco_wrappers = ->
       fs.writeFile "docs/doc_#{file}.html", html
 
 
-# ...
+# Process the configuration file
 process_config = (config={}) ->
   _.map config, (value, key, list) ->
     configuration[key] = value if config[key]?
 
 
-#...
+# Remove trailing path names from each file from a list
 clean_path_names = (names) ->
   clean_names = []
   _.each names, (name) ->
@@ -69,7 +72,7 @@ clean_path_names = (names) ->
   return clean_names
 
 
-# ...
+# Remove file extensions from each file from a list
 clean_file_extension = (names) ->
   clean_names = []
   _.each names, (name) ->
@@ -77,7 +80,12 @@ clean_file_extension = (names) ->
   return clean_names
 
 
-# ...
+# Build the main html file by reading the source Markdown file, and if necessary
+# collecting all the filenames of our source. We will then use these names to construct the
+# index that's shown at the top of the page.
+
+# We pass the source Markdown file to Showdown, get the result, then pipe it into 
+# our templating function described above.
 process_html_file = ->
   source = configuration.content_file
   get_subfiles (result) ->
@@ -99,18 +107,18 @@ process_html_file = ->
       fs.writeFile "docs/index.html", html
 
 
-# ...
+# Reads the background image.
 paige_background    = ->
   fs.readFileSync(__dirname + "/../resources/#{configuration.background}.png")
 
 
-# ...
+# Process the Docco files and wrappers if needed.
 check_for_docco = ->
   if configuration.docco_files?
     process_docco_files()
     process_docco_wrappers()
 
-# ...
+# Read our configuration file.
 read_config = (callback) ->
   filename = "paige.config"
   filename = process.ARGV[2] if process.ARGV[2]?
@@ -123,19 +131,13 @@ read_config = (callback) ->
       config = JSON.parse(data)
       callback(config) if callback
 
-# ...
-mdown_template  = template fs.readFileSync(__dirname + '/../resources/paige.jst').toString()
+# Some necessary files
+mdown_template =    template fs.readFileSync(__dirname + '/../resources/paige.jst').toString()
+wrapper_template =  template fs.readFileSync(__dirname + '/../resources/doc.jst').toString()
+config_template =   fs.readFileSync(__dirname + '/../resources/paige.config').toString()
 
-# ...
-wrapper_template  = template fs.readFileSync(__dirname + '/../resources/doc.jst').toString()
-
-# ...
-config_template  = fs.readFileSync(__dirname + '/../resources/paige.config').toString()
-
-# ...
+# And our current, and base configuration
 configuration = {}
-
-# ...
 base_config = {
   "title" :             "Untitled",
   "content_file" :      "README.mdown",
