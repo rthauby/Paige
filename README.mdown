@@ -1,0 +1,11 @@
+### Paige.js - *Painless page generation for Github code*
+
+Paige.js is a simple npm package for creating instant [Github Pages](http://pages.github.com/) without having to deal with any HTML *or* CSS coding. Paige let's you just focus on your code while providing a clean and presentable face for your project.
+
+### Installation Instructions
+
+`` sudo npm install paige ``
+
+### Overview
+
+I created Paige as I saw myself repeating more and more the classic setup for a github page. Multiple lines of css and html that I then needed to format again and again. Not only that, but I had a little epiphany: *"I'm terrible at writing... I don't want to do this **twice**. Once for the project page, and once for the Github repo."*

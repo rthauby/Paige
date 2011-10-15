@@ -9,6 +9,7 @@
       background: #fff url("bg.png");
       color: #252519;
       font-family: "Palatino Linotype", "Book Antiqua", Palatino, FreeSerif, serif;
+      padding: 0 0 50px 50px;
     }
     div.container {
       width: 720px;
@@ -23,12 +24,12 @@
     a, a:visited {
       padding: 0 2px;
       text-decoration: none;
-      background: #dadaba;
-      color: #252519;
+      background: #dbe6f3;
+      color: #3f6fa5;
     }
     a:active, a:hover {
-      color: #000;
-      background: #f0c095;
+      color: #dbe6f3;
+      background: #3f6fa5;
     }
     h1, h2, h3, h4, h5, h6 {
       margin-top: 40px;
@@ -75,13 +76,13 @@
 <body>
   <h1><%= header %></h1>
   <% if(subheader != ""){ %>
-    <h2><%= subheader %></h2>
+    <em><%= subheader %></em>
   <% } %>
   <% if(include_index){ %>
-  <h2>Index:</h2>
+  <h3>Source files:</h3>
   <ol>
     <% for (var i=0, l=subfiles.length; i<l; i++) { %>
-      <li><a href="<%= subfiles[i] %>" target="_blank"><%= subfiles[i] %></a></li>
+      <li><a href="doc_<%= subfiles_names[i] %>.html"><%= subfiles[i] %></a></li>
     <% } %>
   </ol>
   <% } %>
