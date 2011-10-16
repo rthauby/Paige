@@ -44,7 +44,16 @@ The properties here are:
 - *subheader*: Your tagline goes here.
 - *background*: Eye candy. Available flavors are: bright-squares, felt, whitey, diagonal-noise, circles, project-paper. All pattern sourced from the brilliant [Subtle Patterns](http://subtlepatterns.com/)
 
+### Known Issues
+
+- Docco file generation supported only on unix-based system.
+- Index of files is not ordered alphabetically.
+
 ### Change Log
+
+#### 0.1.2
+
+Minor language tweaks and info.
 
 #### 0.1.0
 
