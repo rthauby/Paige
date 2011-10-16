@@ -5,6 +5,8 @@ fs =              require 'fs'
 path =            require 'path'
 showdown =        require('./../vendor/showdown').Showdown
 {spawn, exec} =   require 'child_process'
+events      =     require('events')
+promise =         new events.EventEmitter
 
 # Ensure that the destination directory exists.
 ensure_directory = (dir, callback) ->
@@ -30,8 +32,22 @@ template = (str) ->
 # Kind of hacky, but I can't figure out another way of doing this cleanly.
 # Will list all the files that will be used as your source file for passing onto Docco.
 get_subfiles = (callback) ->
-  exec "ls #{configuration.docco_files}", (error, stdout, stderr) ->
-    callback stdout.trim().split("\n") if callback
+  results = []
+  count = 0
+  find_files = (file, total) ->
+    f_path = file.substr(0,file.lastIndexOf('/')+1)
+    f_file = file.substr(file.lastIndexOf('/')+1)
+    exec "find ./#{f_path} -name '#{f_file}' -print", (error, stdout, stderr) ->
+      count++
+      results = _.uniq(_.union(results, stdout.trim().split("\n")))
+      if count >= total
+        callback results.sort() if callback
+
+  if _.isArray(configuration.docco_files)
+    _.each configuration.docco_files, (file) ->
+      find_files(file,configuration.docco_files.length)
+  else if _.isString(configuration.docco_files)
+    find_files(configuration.docco_files,1)
 
 
 # Pass the list of files as process arguments, which is the only way I can interface with Docco at this point.
@@ -41,8 +57,8 @@ process_docco_files = ->
     require 'docco'
 
 
-# Creates html wrapper for all the Docco pages. 
-# The point here is that I can now keep a navigation bar at the top without having to 
+# Creates html wrapper for all the Docco pages.
+# The point here is that I can now keep a navigation bar at the top without having to
 # mess with any of the Docco internals at all.
 process_docco_wrappers = ->
   get_subfiles (result) ->
@@ -84,7 +100,7 @@ clean_file_extension = (names) ->
 # collecting all the filenames of our source. We will then use these names to construct the
 # index that's shown at the top of the page.
 
-# We pass the source Markdown file to Showdown, get the result, then pipe it into 
+# We pass the source Markdown file to Showdown, get the result, then pipe it into
 # our templating function described above.
 process_html_file = ->
   source = configuration.content_file
@@ -92,19 +108,22 @@ process_html_file = ->
     subfiles_names = clean_file_extension(result) if configuration.include_index
     subfiles = clean_path_names(result) if configuration.include_index
     fs.readFile source, "utf-8", (error, code) ->
-      content_html = showdown.makeHtml code
-      throw error if error
-      html = mdown_template {
-        content_html:     content_html,
-        title:            configuration.title,
-        header:           configuration.header,
-        subheader:        configuration.subheader,
-        include_index:    configuration.include_index,
-        subfiles:         subfiles,
-        subfiles_names:   subfiles_names
-      }
-      console.log "paige: #{source} -> docs/index.html"
-      fs.writeFile "docs/index.html", html
+      if error
+        console.log "\nThere was a problem reading your the content file: #{source}"
+        throw error
+      else
+        content_html = showdown.makeHtml code
+        html = mdown_template {
+          content_html:     content_html,
+          title:            configuration.title,
+          header:           configuration.header,
+          subheader:        configuration.subheader,
+          include_index:    configuration.include_index,
+          subfiles:         subfiles,
+          subfiles_names:   subfiles_names
+        }
+        console.log "paige: #{source} -> docs/index.html"
+        fs.writeFile "docs/index.html", html
 
 
 # Reads the background image.
