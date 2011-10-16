@@ -6,6 +6,10 @@ Paige is largely influenced by [Docco](http://jashkenas.github.com/docco/) and [
 
 Paige.js is [hosted on Github](https://github.com/rthauby/Paige). Please feel free to mess around with it and let me know of any bugs you find. Also you can always reach me on twitter [@rthauby](http://www.twitter.com/rthauby).
 
+### Demo
+
+You're either reading this at the [project page itself](http://rthauby.github.com/Paige/), or on the Github repo site. If it's the latter, you can see the output of running paige against this very Readme file [here](http://rthauby.github.com/Paige/). If it's the former, well, you're looking at it.
+
 ### Installation Instructions
 
 You'll be needing [Node.js](http://nodejs.org/), [Docco](http://jashkenas.github.com/docco/) and [Underscore](http://documentcloud.github.com/underscore/). Then to install:
