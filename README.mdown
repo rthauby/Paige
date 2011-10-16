@@ -2,7 +2,7 @@
 
 Paige.js is a simple npm package for creating instant [Github Pages](http://pages.github.com/) without having to deal with any HTML *or* CSS coding. Paige let's you just focus on your code while providing a clean and presentable face for your project. The project page for Paige, itself, was generated with paige.js.
 
-Paige is largely influenced by [Docco](http://jashkenas.github.com/docco/) and [Underscore](http://documentcloud.github.com/underscore/). The idea behind this project was to&mdash;in a sense&mdash;extend the wonderful functionality of Docco, and take it one step further as a more fully-featured project site. As such, Paige uses Docco for its source-file annotation, and it's style is inspired heavily on the beauty and simplicity of the Underscore website. Not only that, but they are both direct dependencies of this project as well.
+Paige is largely influenced by [Docco](http://jashkenas.github.com/docco/) and [Underscore](http://documentcloud.github.com/underscore/). The idea behind this project was to&mdash;in a sense&mdash;extend the wonderful functionality of Docco, and take it one step further as a more fully-featured project site. As such, Paige uses Docco for its source-file annotation, and its style is inspired heavily on the beauty and simplicity of the Underscore website. Not only that, but they are both direct dependencies of this project as well.
 
 Paige.js is [hosted on Github](https://github.com/rthauby/Paige). Please feel free to mess around with it and let me know of any bugs you find. Also you can always reach me on twitter [@rthauby](http://www.twitter.com/rthauby).
 
