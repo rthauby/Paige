@@ -55,6 +55,10 @@ The properties here are:
 
 ### Change Log
 
+#### 0.1.3
+
+Fixed styling issues with headers and `code/pre` tags
+
 #### 0.1.2
 
 Minor language tweaks and info.
