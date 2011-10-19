@@ -874,7 +874,7 @@ var _DoCodeBlocks = function(text) {
 			codeblock = codeblock.replace(/^\n+/g,""); // trim leading newlines
 			codeblock = codeblock.replace(/\n+$/g,""); // trim trailing whitespace
 
-			codeblock = "<code><pre>" + codeblock + "</pre></code>\n";
+			codeblock = "<pre><code>" + codeblock + "</code></pre>\n";
 
 			return hashBlock(codeblock) + nextChar;
 		}
