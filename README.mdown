@@ -28,7 +28,7 @@ Paige takes one argument only, and it's the location to a configuration file. Al
 
 A basic configuration file looks like this:
 
-     {
+    {
         "title" :             "Paige.js",
         "content_file" :      "README.mdown",
         "include_index" :     true,
@@ -36,7 +36,7 @@ A basic configuration file looks like this:
         "header" :            "Paige.js",
         "subheader" :         "The quickie-wiki Github project page generator",
         "background" :        "bright_squares"
-        }
+    }
 
 The properties here are:
 

@@ -13,6 +13,27 @@ ensure_directory = (dir, callback) ->
   exec "mkdir -p #{dir}", -> callback()
 
 
+# Read our configuration file.
+read_config = (callback) ->
+  filename = "paige.config"
+  filename = process.ARGV[2] if process.ARGV[2]?
+  fs.readFile filename, "utf-8", (error, data) ->
+    if error
+      console.log "\nCould not find a configuration file. (default: ./paige.config)"
+      console.log "Create and specify a configuration file. Example:\n\n"
+      console.log config_template + "\n"
+    else
+      config = JSON.parse(data)
+      process_config(config)
+      callback(config) if callback
+
+
+# ...
+copy_image = ->
+  desired_image = paige_background()
+  fs.writeFile 'docs/bg.png', desired_image
+
+
 # Micro-templating, originally by John Resig, borrowed by way of
 # [Underscore.js](http://documentcloud.github.com/underscore/).
 template = (str) ->
@@ -137,18 +158,6 @@ check_for_docco = ->
     process_docco_files()
     process_docco_wrappers()
 
-# Read our configuration file.
-read_config = (callback) ->
-  filename = "paige.config"
-  filename = process.ARGV[2] if process.ARGV[2]?
-  fs.readFile filename, "utf-8", (error, data) ->
-    if error
-      console.log "\nCould not find a configuration file. (default: ./paige.config)"
-      console.log "Create and specify a configuration file. Example:\n\n"
-      console.log config_template + "\n"
-    else
-      config = JSON.parse(data)
-      callback(config) if callback
 
 # Some necessary files
 mdown_template =    template fs.readFileSync(__dirname + '/../resources/paige.jst').toString()
@@ -170,7 +179,6 @@ base_config = {
 # Run the script
 ensure_directory 'docs', ->
   read_config (config) ->
-    process_config(config)
-    fs.writeFile 'docs/bg.png', paige_background()
+    copy_image()
     process_html_file()
     check_for_docco()
