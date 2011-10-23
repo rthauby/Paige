@@ -12,7 +12,7 @@ You're either reading this at the [project page itself](http://rthauby.github.co
 
 ### Installation Instructions
 
-You'll be needing [Node.js](http://nodejs.org/), [Docco](http://jashkenas.github.com/docco/) and [Underscore](http://documentcloud.github.com/underscore/). Then to install:
+You'll be needing [Node.js](http://nodejs.org/) and [Pygments](http://pygments.org/). [Docco](http://jashkenas.github.com/docco/) and [Underscore](http://documentcloud.github.com/underscore/) are included as package dependencies. Then to install:
 
 `` sudo npm install paige ``
 
