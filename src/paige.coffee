@@ -7,6 +7,7 @@ showdown =        require('./../vendor/showdown').Showdown
 {spawn, exec} =   require 'child_process'
 events      =     require('events')
 promise =         new events.EventEmitter
+rocco =           require './rocco.js'
 
 # Ensure that the destination directory exists.
 ensure_directory = (dir, callback) ->
@@ -51,7 +52,7 @@ template = (str) ->
 
 
 # Kind of hacky, but I can't figure out another way of doing this cleanly.
-# Will list all the files that will be used as your source file for passing onto Docco.
+# Will list all the files that will be used as your source file for passing onto rocco.
 get_subfiles = (callback) ->
   results = []
   count = 0
@@ -71,17 +72,16 @@ get_subfiles = (callback) ->
     find_files(configuration.docco_files,1)
 
 
-# Pass the list of files as process arguments, which is the only way I can interface with Docco at this point.
+# Pass the list of files as process arguments, which is the only way I can interface with rocco at this point.
 process_docco_files = ->
   get_subfiles (result) ->
-    process.ARGV = process.argv = result
-    require 'docco'
+    rocco(result)
 
 
-# Creates html wrapper for all the Docco pages.
+# Creates html wrapper for all the rocco pages.
 # The point here is that I can now keep a navigation bar at the top without having to
-# mess with any of the Docco internals at all.
-process_docco_wrappers = ->
+# mess with any of the rocco internals at all.
+process_rocco_wrappers = ->
   get_subfiles (result) ->
     result = clean_path_names result
     result = clean_file_extension result
@@ -152,11 +152,11 @@ paige_background    = ->
   fs.readFileSync(__dirname + "/../resources/#{configuration.background}.png")
 
 
-# Process the Docco files and wrappers if needed.
-check_for_docco = ->
+# Process the rocco files and wrappers if needed.
+check_for_rocco = ->
   if configuration.docco_files?
     process_docco_files()
-    process_docco_wrappers()
+    process_rocco_wrappers()
 
 
 # Some necessary files
@@ -181,4 +181,4 @@ ensure_directory 'docs', ->
   read_config (config) ->
     copy_image()
     process_html_file()
-    check_for_docco()
+    check_for_rocco()
