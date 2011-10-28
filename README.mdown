@@ -53,7 +53,15 @@ The properties here are:
 - Docco file generation supported only on unix-based system.
 - Index of files is not ordered alphabetically.
 
+### License
+
+This entire project is [MIT licensed](http://www.opensource.org/licenses/mit-license.php).
+
 ### Change Log
+
+#### 0.1.4
+
+Incorporated Docco within the Paige project itself for further customization and integration. For now, added custom output directory.
 
 #### 0.1.3
 

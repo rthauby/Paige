@@ -6,13 +6,19 @@ path =            require 'path'
 showdown =        require('./../vendor/showdown').Showdown
 {spawn, exec} =   require 'child_process'
 events      =     require('events')
-promise =         new events.EventEmitter
 rocco =           require './rocco.js'
 
-# Ensure that the destination directory exists.
-ensure_directory = (dir, callback) ->
-  exec "mkdir -p #{dir}", -> callback()
-
+subfiles = []
+configuration = {
+  "title" :             "Untitled",
+  "content_file" :      "README.mdown",
+  "include_index" :     false,
+  "docco_files" :       null,
+  "header" :            "Untitled",
+  "subheader" :         "Untitled",
+  "background" :        "bright_squares",
+  "output" :            "docs"
+}
 
 # Read our configuration file.
 read_config = (callback) ->
@@ -29,10 +35,49 @@ read_config = (callback) ->
       callback(config) if callback
 
 
+# Process the configuration file
+process_config = (config={}) ->
+  _.map config, (value, key, list) ->
+    configuration[key] = value if config[key]?
+
+
+# Ensure that the destination directory exists.
+ensure_directory = (dir, callback) ->
+  exec "mkdir -p #{dir}", -> callback()
+
+
 # ...
 copy_image = ->
-  desired_image = paige_background()
-  fs.writeFile 'docs/bg.png', desired_image
+  desired_image = fs.readFileSync(__dirname + "/../resources/#{configuration.background}.png")
+  fs.writeFile "#{configuration.output}/bg.png", desired_image
+
+
+# Build the main html file by reading the source Markdown file, and if necessary
+# collecting all the filenames of our source. We will then use these names to construct the
+# index that's shown at the top of the page.
+# We pass the source Markdown file to Showdown, get the result, then pipe it into
+# our templating function described above.
+process_html_file = ->
+  source = configuration.content_file
+  subfiles_names = clean_file_extension(subfiles) if configuration.include_index
+  clean_subfiles = clean_path_names(subfiles) if configuration.include_index
+  fs.readFile source, "utf-8", (error, code) ->
+    if error
+      console.log "\nThere was a problem reading your the content file: #{source}"
+      throw error
+    else
+      content_html = showdown.makeHtml code
+      html = mdown_template {
+        content_html:     content_html,
+        title:            configuration.title,
+        header:           configuration.header,
+        subheader:        configuration.subheader,
+        include_index:    configuration.include_index,
+        subfiles:         clean_subfiles,
+        subfiles_names:   subfiles_names
+      }
+      console.log "paige: #{source} -> #{configuration.output}/index.html"
+      fs.writeFile "#{configuration.output}/index.html", html
 
 
 # Micro-templating, originally by John Resig, borrowed by way of
@@ -53,52 +98,22 @@ template = (str) ->
 
 # Kind of hacky, but I can't figure out another way of doing this cleanly.
 # Will list all the files that will be used as your source file for passing onto rocco.
-get_subfiles = (callback) ->
-  results = []
+get_subfiles = (callback) =>
   count = 0
-  find_files = (file, total) ->
+  find_files = (file, total) =>
     f_path = file.substr(0,file.lastIndexOf('/')+1)
     f_file = file.substr(file.lastIndexOf('/')+1)
     exec "find ./#{f_path} -name '#{f_file}' -print", (error, stdout, stderr) ->
       count++
-      results = _.uniq(_.union(results, stdout.trim().split("\n")))
+      subfiles = _.uniq(_.union(subfiles, stdout.trim().split("\n")))
       if count >= total
-        callback results.sort() if callback
+        callback() if callback
 
   if _.isArray(configuration.docco_files)
     _.each configuration.docco_files, (file) ->
       find_files(file,configuration.docco_files.length)
   else if _.isString(configuration.docco_files)
     find_files(configuration.docco_files,1)
-
-
-# Pass the list of files as process arguments, which is the only way I can interface with rocco at this point.
-process_docco_files = ->
-  get_subfiles (result) ->
-    rocco(result)
-
-
-# Creates html wrapper for all the rocco pages.
-# The point here is that I can now keep a navigation bar at the top without having to
-# mess with any of the rocco internals at all.
-process_rocco_wrappers = ->
-  get_subfiles (result) ->
-    result = clean_path_names result
-    result = clean_file_extension result
-    _.each result, (file) ->
-      html = wrapper_template {
-        title:            configuration.title,
-        header:           configuration.header,
-        subheader:        configuration.subheader,
-        file:             file
-      }
-      fs.writeFile "docs/doc_#{file}.html", html
-
-
-# Process the configuration file
-process_config = (config={}) ->
-  _.map config, (value, key, list) ->
-    configuration[key] = value if config[key]?
 
 
 # Remove trailing path names from each file from a list
@@ -117,68 +132,21 @@ clean_file_extension = (names) ->
   return clean_names
 
 
-# Build the main html file by reading the source Markdown file, and if necessary
-# collecting all the filenames of our source. We will then use these names to construct the
-# index that's shown at the top of the page.
-
-# We pass the source Markdown file to Showdown, get the result, then pipe it into
-# our templating function described above.
-process_html_file = ->
-  source = configuration.content_file
-  get_subfiles (result) ->
-    subfiles_names = clean_file_extension(result) if configuration.include_index
-    subfiles = clean_path_names(result) if configuration.include_index
-    fs.readFile source, "utf-8", (error, code) ->
-      if error
-        console.log "\nThere was a problem reading your the content file: #{source}"
-        throw error
-      else
-        content_html = showdown.makeHtml code
-        html = mdown_template {
-          content_html:     content_html,
-          title:            configuration.title,
-          header:           configuration.header,
-          subheader:        configuration.subheader,
-          include_index:    configuration.include_index,
-          subfiles:         subfiles,
-          subfiles_names:   subfiles_names
-        }
-        console.log "paige: #{source} -> docs/index.html"
-        fs.writeFile "docs/index.html", html
-
-
-# Reads the background image.
-paige_background    = ->
-  fs.readFileSync(__dirname + "/../resources/#{configuration.background}.png")
-
-
 # Process the rocco files and wrappers if needed.
 check_for_rocco = ->
   if configuration.docco_files?
-    process_docco_files()
-    process_rocco_wrappers()
+    rocco(subfiles, configuration)
 
 
 # Some necessary files
 mdown_template =    template fs.readFileSync(__dirname + '/../resources/paige.jst').toString()
-wrapper_template =  template fs.readFileSync(__dirname + '/../resources/doc.jst').toString()
 config_template =   fs.readFileSync(__dirname + '/../resources/paige.config').toString()
 
-# And our current, and base configuration
-configuration = {}
-base_config = {
-  "title" :             "Untitled",
-  "content_file" :      "README.mdown",
-  "include_index" :     false,
-  "docco_files" :       null,
-  "header" :            "Untitled",
-  "subheader" :         "Untitled",
-  "background" :        "bright_squares"
-}
 
 # Run the script
-ensure_directory 'docs', ->
-  read_config (config) ->
-    copy_image()
-    process_html_file()
-    check_for_rocco()
+read_config (config) ->
+  ensure_directory configuration.output, ->
+    get_subfiles ->
+      copy_image()
+      process_html_file()
+      check_for_rocco()

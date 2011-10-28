@@ -92,7 +92,13 @@ generate_html = (source, sections) ->
   title = path.basename source
   dest  = destination source
   html  = rocco_template {
-    title: title, sections: sections, sources: sources, path: path, destination: destination
+    header: configuration.header, 
+    subheader: configuration.subheader, 
+    title: title, 
+    sections: sections, 
+    sources: sources, 
+    path: path, 
+    destination: destination
   }
   console.log "rocco: #{source} -> #{dest}"
   fs.writeFile dest, html
@@ -144,7 +150,7 @@ get_language = (source) -> languages[path.extname(source)]
 # Compute the destination HTML path for an input source file path. If the source
 # is `lib/example.coffee`, the HTML will be at `docs/example.html`
 destination = (filepath) ->
-  'docs/' + path.basename(filepath, path.extname(filepath)) + '.html'
+  configuration.output + '/' + path.basename(filepath, path.extname(filepath)) + '.html'
 
 # Ensure that the destination directory exists.
 ensure_directory = (dir, callback) ->
@@ -184,10 +190,12 @@ highlight_end   = '</pre></div>'
 # rocco's inputs and configurability.
 
 sources = []
+configuration = {}
 
-rocco = (srcs) ->
+rocco = (srcs, config) ->
   sources = srcs
-  fs.writeFile 'docs/rocco.css', rocco_styles
+  configuration = config
+  fs.writeFile "#{configuration.output}/rocco.css", rocco_styles
   files = sources.slice(0)
   next_file = -> generate_documentation files.shift(), next_file if files.length
   next_file()
