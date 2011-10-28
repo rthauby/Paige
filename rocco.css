@@ -1,3 +1,40 @@
+#navbar {
+  position: fixed;
+  width: 960px;
+  height: 34px;
+  background: #fff;
+  border-bottom: 1px solid #cdcdcd;
+  border-right: 1px solid #cdcdcd;
+  border-bottom-right-radius: 5px;
+  -webkit-border-bottom-right-radius: 5px;
+  -moz-border-bottom-right-radius: 5px;
+  z-index: 9;
+}
+#navbar a, #navbar a:visited {
+  font-weight: normal;
+  padding: 0 2px;
+  text-decoration: none;
+  color: #3f6fa5;
+}
+#navbar a:active, #navbar a:hover {
+  text-decoration: underline;
+}
+#navbar h3 {
+  top: 0;
+  margin: 0;
+  padding: 4px 20px;
+}
+#navbar h3 a {
+  float: left;
+  display: block;
+  padding-right: 20px;
+}
+#container {
+  padding-top: 20px;
+}
+body {
+  background: #fff url("bg.png");
+}
 /*--------------------- Layout and Typography ----------------------------*/
 body {
   font-family: 'Palatino Linotype', 'Book Antiqua', Palatino, FreeSerif, serif;
@@ -33,17 +70,18 @@ h1, h2, h3, h4, h5, h6 {
 }
 #jump_to, #jump_page {
   background: white;
-  -webkit-box-shadow: 0 0 25px #777; -moz-box-shadow: 0 0 25px #777;
-  -webkit-border-bottom-left-radius: 5px; -moz-border-radius-bottomleft: 5px;
-  font: 10px Arial;
-  text-transform: uppercase;
+  border-bottom: 1px solid #cdcdcd;
+  border-left: 1px solid #cdcdcd;
+  border-bottom-left-radius: 5px;
+  -webkit-border-bottom-left-radius: 5px;
+  -moz-border-radius-bottomleft: 5px;
   cursor: pointer;
   text-align: right;
 }
 #jump_to, #jump_wrapper {
   position: fixed;
   right: 0; top: 0;
-  padding: 5px 10px;
+  padding: 5px 30px;
 }
   #jump_wrapper {
     padding: 0;
@@ -58,7 +96,7 @@ h1, h2, h3, h4, h5, h6 {
     }
       #jump_page .source {
         display: block;
-        padding: 5px 10px;
+        padding: 5px 30px;
         text-decoration: none;
         border-top: 1px solid #eee;
       }
@@ -115,7 +153,7 @@ table td {
   }
     pre, tt, code {
       font-size: 12px; line-height: 18px;
-      font-family: Monaco, Consolas, "Lucida Console", monospace;
+      font-family: Menlo, Monaco, Consolas, "Lucida Console", monospace;
       margin: 0; padding: 0;
     }
 
