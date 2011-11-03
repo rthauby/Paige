@@ -23,7 +23,7 @@ configuration = {
 # Read our configuration file.
 read_config = (callback) ->
   filename = "paige.config"
-  filename = process.ARGV[2] if process.ARGV[2]?
+  filename = process.argv[2] if process.argv[2]?
   fs.readFile filename, "utf-8", (error, data) ->
     if error
       console.log "\nCould not find a configuration file. (default: ./paige.config)"
