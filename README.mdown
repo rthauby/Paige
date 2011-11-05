@@ -59,6 +59,10 @@ This entire project is [MIT licensed](http://www.opensource.org/licenses/mit-lic
 
 ### Change Log
 
+#### 0.1.5
+
+Fixed - Correct process.ARGV. Should be process.argv. [mitchellrj](https://github.com/mitchellrj)
+
 #### 0.1.4
 
 Incorporated Docco within the Paige project itself for further customization and integration. For now, added custom output directory.
