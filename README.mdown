@@ -28,15 +28,16 @@ Paige takes one argument only, and it's the location to a configuration file. Al
 
 A basic configuration file looks like this:
 
-    {
-        "title" :             "Paige.js",
-        "content_file" :      "README.mdown",
-        "include_index" :     true,
-        "docco_files" :       "src/*.coffee",
-        "header" :            "Paige.js",
-        "subheader" :         "The quickie-wiki Github project page generator",
-        "background" :        "bright_squares"
-    }
+	{
+	  "title" :             "Paige.js",
+	  "content_file" :      "README.mdown",
+	  "include_index" :     true,
+	  "docco_files" :       "src/*.coffee",
+	  "header" :            "Paige.js",
+	  "subheader" :         "The quickie-wiki Github project page generator",
+	  "background" :        "diagonal-noise",
+	  "github" :			"https://github.com/rthauby/Paige"
+	}
 
 The properties here are:
 
@@ -47,6 +48,7 @@ The properties here are:
 - *header*: Main header for the page.
 - *subheader*: Your tagline goes here.
 - *background*: Eye candy. Available flavors are: bright-squares, felt, whitey, diagonal-noise, circles, project-paper. All pattern sourced from the brilliant [Subtle Patterns](http://subtlepatterns.com/)
+- *github*: The URL to the GitHub repository, showing the "Fork me on GitHub" ribbon
 
 ### Known Issues
 
