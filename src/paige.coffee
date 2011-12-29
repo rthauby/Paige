@@ -66,6 +66,9 @@ process_html_file = ->
       console.log "\nThere was a problem reading your the content file: #{source}"
       throw error
     else
+      # replace ``` block with <pre> tags
+      code = code.replace /```\w*\n?([^```]*)```/gm, '<pre>\n$1</pre>'
+    
       content_html = showdown.makeHtml code
       html = mdown_template {
         content_html:     content_html,
