@@ -72,6 +72,7 @@ process_html_file = ->
         title:            configuration.title,
         header:           configuration.header,
         subheader:        configuration.subheader,
+        github:           configuration.github,
         include_index:    configuration.include_index,
         subfiles:         clean_subfiles,
         subfiles_names:   subfiles_names
