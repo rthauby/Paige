@@ -36,7 +36,7 @@ A basic configuration file looks like this:
 	  "header" :            "Paige.js",
 	  "subheader" :         "The quickie-wiki Github project page generator",
 	  "background" :        "diagonal-noise",
-	  "github" :			"https://github.com/rthauby/Paige"
+	  "github" :			      "https://github.com/rthauby/Paige"
 	}
 
 The properties here are:
@@ -61,9 +61,14 @@ This entire project is [MIT licensed](http://www.opensource.org/licenses/mit-lic
 
 ### Change Log
 
+#### 0.1.6
+
+- Replacing github syntax highlighted code blocks with showdown friendly pre tags. Many thanks to [DamonOehlman](https://github.com/DamonOehlman)
+- Add GitHub repository URL config for "Fork me on GitHub" ribbon. Many thanks to [daffl](https://github.com/daffl)
+
 #### 0.1.5
 
-Fixed - Correct process.ARGV. Should be process.argv. [mitchellrj](https://github.com/mitchellrj)
+Fixed - Correct process.ARGV. Should be process.argv. Many thanks to [mitchellrj](https://github.com/mitchellrj)
 
 #### 0.1.4
 
