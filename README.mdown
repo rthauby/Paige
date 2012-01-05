@@ -61,7 +61,7 @@ This entire project is [MIT licensed](http://www.opensource.org/licenses/mit-lic
 
 ### Change Log
 
-#### 0.1.6
+#### 0.1.7
 
 - Replacing github syntax highlighted code blocks with showdown friendly pre tags. Many thanks to [DamonOehlman](https://github.com/DamonOehlman)
 - Add GitHub repository URL config for "Fork me on GitHub" ribbon. Many thanks to [daffl](https://github.com/daffl)
